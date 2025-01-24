@@ -98,6 +98,12 @@ func TestExternalOIDCWithKeycloak(t *testing.T) {
 		t.Logf("will use existing keycloak deployment at URL: %s", keycloakURL)
 		kcClient = tc.setupKeycloakClient(testCtx, keycloakURL)
 
+	} else if len(os.Getenv("OPENSHIFT_ONLY_DEPLOY_IDP")) > 0 {
+		kcClient, idpName, _ := test.AddKeycloakIDP(tc.t, tc.kubeConfig, true)
+		t.Logf("deployed keycloak IDP")
+		t.Logf("* provider name: %s", idpName)
+		t.Logf("* provider URL: %s", kcClient.IssuerURL())
+		return
 	} else {
 		t.Logf("no existing keycloak deployment found; will create new")
 		var cleanups []func()
