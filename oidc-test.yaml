@@ -1,0 +1,35 @@
+apiVersion: config.openshift.io/v1
+kind: Authentication
+metadata:
+  name: cluster
+spec:
+  oauthMetadata:
+    name: ""
+  serviceAccountIssuer: ""
+  type: "OIDC"
+  webhookTokenAuthenticator:
+  oidcProviders:
+  - name: "keycloak-test-e2e-test-authentication-operator-jmx2d"
+    issuer:
+      issuerURL: "https://test-route-e2e-test-authentication-operator-jmx2d.apps.ci-ln-h33189b-76ef8.aws-2.ci.openshift.org/realms/master"
+      audiences:
+      - openshift-aud
+      - admin-cli
+      - console
+      issuerCertificateAuthority:
+        name: keycloak-test-e2e-test-authentication-operator-jmx2d-ca
+    oidcClients:
+    - componentName: "console"
+      componentNamespace: "openshift-console"
+      clientID: "console"
+      clientSecret: 
+        name: keycloak-test-e2e-test-authentication-operator-jmx2d-secret
+    claimMappings:
+      username:
+        claim: "email"
+        prefixPolicy: "Prefix"
+        prefix:
+          prefixString: "oidc-test:"
+      groups:
+        claim: "groups"
+        prefix: ""
