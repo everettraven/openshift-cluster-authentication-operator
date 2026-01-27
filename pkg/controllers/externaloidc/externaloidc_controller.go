@@ -193,9 +193,15 @@ func generateJWTForProvider(provider configv1.OIDCProvider, configMapLister core
 		return apiserverv1beta1.JWTAuthenticator{}, fmt.Errorf("generating claimValidationRules for provider %q: %v", provider.Name, err)
 	}
 
+	userValidationRules, err := generateUserValidationRules(provider.UserValidationRules...)
+	if err != nil {
+		return apiserverv1beta1.JWTAuthenticator{}, fmt.Errorf("generating userValidationRules for provider %q: %v", provider.Name, err)
+	}
+
 	out.Issuer = issuer
 	out.ClaimMappings = claimMappings
 	out.ClaimValidationRules = claimValidationRules
+	out.UserValidationRules = userValidationRules
 
 	return out, nil
 }
@@ -433,6 +439,35 @@ func generateClaimValidationRule(claimValidationRule configv1.TokenClaimValidati
 	}
 
 	return out, nil
+}
+
+// generateUserValidationRules generates the Kubernetes API Server Structured Authentication Configuration
+// user validation rules for the given OpenShift Authentication resource user validation rules.
+//
+// Input is a list of configv1.TokenUserValidationRule objects, which looks like:
+// configv1.TokenUserValidationRule{
+//   Expression: "some string",
+//   Message: "some string"
+// }
+//
+// Output is a list of apiserverv1beta1.UserValidationRule objects, which looks like:
+// apiserverv1beta1.UserValidationRule{
+//   Expression: "some string",
+//   Message: "some string"
+// }
+//
+// Implement this re-mapping method.
+func generateUserValidationRules(userValidationRules ...configv1.TokenUserValidationRule) ([]apiserverv1beta1.UserValidationRule, error) {
+	// TODO: implement me
+	//
+	// NOTE: Expressions need to be validated with:
+	/*
+	validateCELExpression(&authenticationcel.UserValidationCondition{
+		Expression: "${expression}",
+		Message: "${message}",
+	})
+	*/
+	return nil, nil
 }
 
 // getExpectedApplyConfig serializes the input authConfig into JSON and creates an apply configuration
