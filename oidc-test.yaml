@@ -8,6 +8,7 @@ spec:
   serviceAccountIssuer: ""
   type: "OIDC"
   webhookTokenAuthenticator:
+    secret: webhook-authentication-integrated-oauth
   oidcProviders:
   - name: "keycloak-test-e2e-test-authentication-operator-jmx2d"
     issuer:
