@@ -8,23 +8,24 @@ spec:
   serviceAccountIssuer: ""
   type: "OIDC"
   webhookTokenAuthenticator:
-    secret: webhook-authentication-integrated-oauth
+    kubeConfig:
+      name: webhook-authentication-integrated-oauth
   oidcProviders:
-  - name: "keycloak-test-e2e-test-authentication-operator-jmx2d"
+  - name: "keycloak-test-e2e-test-authentication-operator-bzphf"
     issuer:
-      issuerURL: "https://test-route-e2e-test-authentication-operator-jmx2d.apps.ci-ln-h33189b-76ef8.aws-2.ci.openshift.org/realms/master"
+      issuerURL: "https://test-route-e2e-test-authentication-operator-bzphf.apps.ci-ln-z24ffgt-76ef8.aws-4.ci.openshift.org/realms/master"
       audiences:
       - openshift-aud
       - admin-cli
       - console
       issuerCertificateAuthority:
-        name: keycloak-test-e2e-test-authentication-operator-jmx2d-ca
+        name: keycloak-test-e2e-test-authentication-operator-bzphf-ca
     oidcClients:
     - componentName: "console"
       componentNamespace: "openshift-console"
       clientID: "console"
       clientSecret: 
-        name: keycloak-test-e2e-test-authentication-operator-jmx2d-secret
+        name: keycloak-test-e2e-test-authentication-operator-bzphf-secret
     claimMappings:
       username:
         claim: "email"
