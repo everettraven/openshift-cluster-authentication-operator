@@ -7,31 +7,28 @@ spec:
     name: ""
   serviceAccountIssuer: ""
   type: "OIDC"
-  webhookTokenAuthenticator:
-    kubeConfig:
-      name: webhook-authentication-integrated-oauth
+  webhookTokenAuthenticator: null
   oidcProviders:
-  - name: "keycloak-test-e2e-test-authentication-operator-bzphf"
+  - name: "keycloak-test-e2e-test-authentication-operator-5gsgc"
     issuer:
-      issuerURL: "https://test-route-e2e-test-authentication-operator-bzphf.apps.ci-ln-z24ffgt-76ef8.aws-4.ci.openshift.org/realms/master"
+      issuerURL: "https://test-route-e2e-test-authentication-operator-5gsgc.apps.ci-ln-wzj346k-76ef8.aws-4.ci.openshift.org/realms/externaloidc"
       audiences:
       - openshift-aud
       - admin-cli
       - console
+      - k8s-client
       issuerCertificateAuthority:
-        name: keycloak-test-e2e-test-authentication-operator-bzphf-ca
+        name: keycloak-test-e2e-test-authentication-operator-5gsgc-ca
     oidcClients:
     - componentName: "console"
       componentNamespace: "openshift-console"
       clientID: "console"
-      clientSecret: 
-        name: keycloak-test-e2e-test-authentication-operator-bzphf-secret
+      clientSecret:
+        name: keycloak-test-e2e-test-authentication-operator-5gsgc-secret
     claimMappings:
       username:
-        claim: "email"
-        prefixPolicy: "Prefix"
-        prefix:
-          prefixString: "oidc-test:"
+        claim: "preferred_username"
+        prefixPolicy: "NoPrefix"
       groups:
         claim: "groups"
         prefix: ""
