@@ -9,26 +9,45 @@ spec:
   type: "OIDC"
   webhookTokenAuthenticator: null
   oidcProviders:
-  - name: "keycloak-test-e2e-test-authentication-operator-5gsgc"
+  - name: "keycloak-test-e2e-test-authentication-operator-6fmp2"
     issuer:
-      issuerURL: "https://test-route-e2e-test-authentication-operator-5gsgc.apps.ci-ln-wzj346k-76ef8.aws-4.ci.openshift.org/realms/externaloidc"
+      issuerURL: "https://test-route-e2e-test-authentication-operator-6fmp2.apps.ci-ln-c1wws1k-72292.origin-ci-int-gce.dev.rhcloud.com/realms/openshift"
       audiences:
       - openshift-aud
       - admin-cli
       - console
-      - k8s-client
+      - openshift-client
       issuerCertificateAuthority:
-        name: keycloak-test-e2e-test-authentication-operator-5gsgc-ca
+        name: keycloak-test-e2e-test-authentication-operator-6fmp2-ca
     oidcClients:
     - componentName: "console"
       componentNamespace: "openshift-console"
       clientID: "console"
       clientSecret:
-        name: keycloak-test-e2e-test-authentication-operator-5gsgc-secret
+        name: keycloak-test-e2e-test-authentication-operator-6fmp2-secret
     claimMappings:
       username:
         claim: "preferred_username"
         prefixPolicy: "NoPrefix"
       groups:
-        claim: "groups"
-        prefix: ""
+        expression: "['none']"
+    externalClaimsSources:
+      - authentication:
+          type: ClientCredential
+          clientCredential:
+            clientID: oauth-apiserver
+            clientSecret:
+              name: keycloak-admin-client-secret
+            tokenEndpoint: https://test-route-e2e-test-authentication-operator-6fmp2.apps.ci-ln-c1wws1k-72292.origin-ci-int-gce.dev.rhcloud.com/realms/openshift/protocol/openid-connect/token
+            tls:
+              certificateAuthority:
+                name: keycloak-test-e2e-test-authentication-operator-6fmp2-ca
+        url:
+          hostname: "test-route-e2e-test-authentication-operator-6fmp2.apps.ci-ln-c1wws1k-72292.origin-ci-int-gce.dev.rhcloud.com"
+          pathExpression: "['admin', 'realms', 'openshift', 'users'] + [claims.sub] + ['groups']"
+        tls:
+          certificateAuthority:
+            name: keycloak-test-e2e-test-authentication-operator-6fmp2-ca
+        mappings:
+          - name: groups
+            expression: "response.groups"
