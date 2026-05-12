@@ -1,0 +1,53 @@
+apiVersion: config.openshift.io/v1
+kind: Authentication
+metadata:
+  name: cluster
+spec:
+  oauthMetadata:
+    name: ""
+  serviceAccountIssuer: ""
+  type: "OIDC"
+  webhookTokenAuthenticator: null
+  oidcProviders:
+  - name: "keycloak-test-e2e-test-authentication-operator-jhbvd"
+    issuer:
+      issuerURL: "https://test-route-e2e-test-authentication-operator-jhbvd.apps.ci-ln-fzqxd7k-72292.origin-ci-int-gce.dev.rhcloud.com/realms/openshift"
+      audiences:
+      - openshift-aud
+      - admin-cli
+      - console
+      - openshift-client
+      issuerCertificateAuthority:
+        name: keycloak-test-e2e-test-authentication-operator-jhbvd-ca
+    oidcClients:
+    - componentName: "console"
+      componentNamespace: "openshift-console"
+      clientID: "console"
+      clientSecret:
+        name: keycloak-test-e2e-test-authentication-operator-jhbvd-secret
+    claimMappings:
+      username:
+        claim: "preferred_username"
+        prefixPolicy: "NoPrefix"
+      groups:
+        expression: "['none']"
+    externalClaimsSources:
+      - authentication:
+          type: ClientCredential
+          clientCredential:
+            clientID: oauth-apiserver
+            clientSecret:
+              name: keycloak-admin-client-secret
+            tokenEndpoint: https://test-route-e2e-test-authentication-operator-6fmp2.apps.ci-ln-c1wws1k-72292.origin-ci-int-gce.dev.rhcloud.com/realms/openshift/protocol/openid-connect/token
+            tls:
+              certificateAuthority:
+                name: keycloak-test-e2e-test-authentication-operator-6fmp2-ca
+        url:
+          hostname: "test-route-e2e-test-authentication-operator-6fmp2.apps.ci-ln-c1wws1k-72292.origin-ci-int-gce.dev.rhcloud.com"
+          pathExpression: "['admin', 'realms', 'openshift', 'users'] + [claims.sub] + ['groups']"
+        tls:
+          certificateAuthority:
+            name: keycloak-test-e2e-test-authentication-operator-6fmp2-ca
+        mappings:
+          - name: groups
+            expression: "response.groups"
